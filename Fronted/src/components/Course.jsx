@@ -1,8 +1,23 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import { Link } from "react-router-dom";
 import Cards from "./Cards";
-import list from "../list.json";
+import axios from "axios";
+
 const Course = () => {
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    const getBook = async () => {
+      try {
+        const res = await axios("http://localhost:3000/book");
+        console.log(res.data);
+        setBooks(res.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getBook();
+  }, []);
+
   return (
     <>
       <div className="max-w-screen-2xl container mx-auto md:px-20 px-4">
@@ -27,9 +42,9 @@ const Course = () => {
           </Link>
         </div>
         <div className="grid grid-cols-1 mt-11 md:grid-cols-3 gap-10">
-            {list.map((item)=>(
-                <Cards item={item} key={item.id}/>
-            ))}
+          {books.map((item) => (
+            <Cards item={item} key={item.id} />
+          ))}
         </div>
       </div>
     </>
